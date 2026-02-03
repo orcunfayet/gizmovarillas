@@ -4,23 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Valentine's Day!</title>
+    <title>merhaba gizmovarillas</title>
     <style>
-        /* --- CSS STYLING --- */
         body {
             margin: 0;
             padding: 0;
-            /* BACKGROUND IMAGE SETUP */
-            /* We add a dark transparent layer (rgba(0,0,0,0.5)) over the image so text is readable */
-            /* If your image is a PNG, change 'background.jpg' to 'background.png' below */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('background.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            background-color: #000;
+
 
             font-family: 'Georgia', serif;
             color: #ffffff;
-            /* Text is now white for contrast */
             height: 100vh;
             overflow: hidden;
             display: flex;
@@ -28,14 +21,12 @@
             align-items: center;
         }
 
-        /* The Start Screen Overlay */
         #overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            /* Using a semi-transparent pink background here */
             background: rgba(255, 240, 243, 0.9);
             color: #5c2828;
             z-index: 10;
@@ -68,18 +59,16 @@
             transform: scale(1.05);
         }
 
-        /* The Main Content */
         #content {
             text-align: center;
             opacity: 0;
-            /* Hidden initially */
             transition: opacity 2s ease;
             width: 90%;
             max-width: 600px;
         }
 
         .lyrics-box {
-            /* White semi-transparent box for lyrics so they are easy to read over the photo */
+            /* White semi-transparent box for lyrics*/
             background: rgba(255, 255, 255, 0.85);
             color: #333;
             /* Dark text inside the box */
@@ -124,29 +113,82 @@
                 opacity: 0;
             }
         }
+
+        /* Background Slideshow */
+        #background-slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        #background-slideshow div {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        #background-slideshow div.active {
+            opacity: 1;
+        }
+
+        /* Dark overlay on top of images */
+        #background-slideshow::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
     </style>
 </head>
 
 <body>
 
+    <!-- Background Slideshow Container -->
+    <div id="background-slideshow">
+        <div style="background-image: url('C64F1FF0-C9BE-4483-83F5-FD21EB2A7A3A.jpg')" class="active"></div>
+        <div style="background-image: url('FEE5BBE6-9983-4F67-A77A-88142EFCD147.jpg')"></div>
+        <div style="background-image: url('IMG_0532.JPEG')"></div>
+        <div style="background-image: url('IMG_4002.PNG')"></div>
+        <div style="background-image: url('IMG_9362.JPEG')"></div>
+        <div style="background-image: url('IMG_9574.JPEG')"></div>
+    </div>
+
     <div id="overlay">
-        <h1>For My Valentine ❤️</h1>
-        <p>Put your headphones on...</p>
+        <h1> </h1>
+        <p> </p>
         <br>
         <button onclick="startExperience()">Click to Open</button>
     </div>
 
     <div id="content">
-        <h2>Our Song</h2>
+        <h2>Erkin Koray - Seni Her Gördüğümde</h2>
 
         <div class="lyrics-box">
-            Your hair falls in front of your face
-            And I can see the ocean in your eyes
-            And I'm so afraid of letting you go...
-
-            (Paste the full lyrics here.
-            You can also write a love letter here
-            instead of lyrics if you prefer!)
+            İnan ki, senden başka
+            Hiç kimse yok içimde
+            Yüzüne bakmasam da
+            Başımı çevirsem de
+            Seni her gördüğümde
+            Seni her gördüğümde
+            İnan ki senden başka
+            Hiç kimse yok içimde
+            Ne kadar kırgın olsam
+            Dargın olsam da yine
+            İnan ki senden başka
+            Hiç kimse yok içimde
         </div>
         <audio id="music" loop>
             <source src="song.mp3" type="audio/mpeg">
@@ -175,6 +217,37 @@
 
             // 4. Start Floating Hearts
             setInterval(createHeart, 300);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * 20 + 20 + 'px';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+            setInterval(createHeart, 300);
+
+            // 5. Start Background Slideshow
+            startSlideshow();
+        }
+
+        function startSlideshow() {
+            const slides = document.querySelectorAll('#background-slideshow div:not(#background-slideshow::after)');
+
+            const imageSlides = document.querySelectorAll('#background-slideshow div');
+            let currentSlide = 0;
+
+            setInterval(() => {
+                imageSlides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % imageSlides.length;
+                imageSlides[currentSlide].classList.add('active');
+            }, 5000); // Change image every 5 seconds
         }
 
         function createHeart() {
