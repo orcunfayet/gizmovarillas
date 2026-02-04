@@ -170,7 +170,7 @@
         <h1> </h1>
         <p> </p>
         <br>
-        <button onclick="startExperience()">Click to Open</button>
+        <button onclick="startExperience()">merhaba</button>
     </div>
 
     <div id="content">
@@ -214,12 +214,13 @@
             } catch (e) {
                 console.log("Autoplay prevented. User interaction required.");
             }
+            // 5. Start Background Slideshow
+            startSlideshow();
 
             // 4. Start Floating Hearts
             setInterval(createHeart, 300);
 
-            // 5. Start Background Slideshow
-            startSlideshow();
+
         }
 
 
