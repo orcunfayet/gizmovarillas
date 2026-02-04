@@ -226,16 +226,19 @@
 
 
         function startSlideshow() {
-            const slides = document.querySelectorAll('#background-slideshow div:not(#background-slideshow::after)');
+            const imageSlides = document.querySelectorAll('#background-slideshow > div');
+            let currentSlide = 0;
+            console.log('Slideshow started. Found ' + imageSlides.length + ' slides.');
 
-            const imageSlides = document.querySelectorAll('#background-slideshow div');
-            let currentSlide = 1;
-
-            setInterval(() => {
+            function nextSlide() {
+                console.log('Transitioning from slide ' + currentSlide);
                 imageSlides[currentSlide].classList.remove('active');
-                currentSlide = (currentSlide) % imageSlides.length;
+                currentSlide = (currentSlide + 1) % imageSlides.length;
                 imageSlides[currentSlide].classList.add('active');
-            }, 5000); // Change image every 5 seconds
+                console.log('Now showing slide ' + currentSlide);
+            }
+
+            setInterval(nextSlide, 5000); // Change image every 5 seconds
         }
 
         function createHeart() {
