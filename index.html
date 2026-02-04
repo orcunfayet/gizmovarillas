@@ -229,11 +229,11 @@
             const slides = document.querySelectorAll('#background-slideshow div:not(#background-slideshow::after)');
 
             const imageSlides = document.querySelectorAll('#background-slideshow div');
-            let currentSlide = 0;
+            let currentSlide = 1;
 
             setInterval(() => {
                 imageSlides[currentSlide].classList.remove('active');
-                currentSlide = (currentSlide + 1) % imageSlides.length;
+                currentSlide = (currentSlide) % imageSlides.length;
                 imageSlides[currentSlide].classList.add('active');
             }, 5000); // Change image every 5 seconds
         }
