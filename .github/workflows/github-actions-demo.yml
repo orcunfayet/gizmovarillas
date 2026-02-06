@@ -22,10 +22,10 @@ jobs:
           python-version: '3.x'
 
       - name: Install HTML Validator
-        run: pip install html5-validator
+        run: pip install html5validator
 
       - name: Run Validation
-        run: html5-validator --root .
+        run: html5validator --root .
 
   deploy:
     needs: validate-html
