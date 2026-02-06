@@ -1,47 +1,64 @@
-name: Generic CI/CD Pipeline
+name: Generic CI/CD Pipeline for HTML
 run-name: ${{ github.actor }} triggered pipeline 🚀
 on:
   push:
     branches: [ "main", "master" ]
   pull_request:
     branches: [ "main", "master" ]
-
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 jobs:
-  build:
+  validate-html:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Run Build Simulation
-        run: |
-          echo "Building the project..."
-          # Simulate build time
-          sleep 1
-          echo "Build complete."
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
 
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Run Tests
-        run: |
-          echo "Running unit tests..."
-          # Simulate test execution
-          echo "Test 1: Passed"
-          echo "Test 2: Passed"
-          echo "All tests passed!"
+      - name: Install HTML Validator
+        run: pip install html5-validator
+
+      - name: Run Validation
+        run: html5-validator --root .
 
   deploy:
-    needs: test
+    needs: validate-html
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy
-        run: |
-          echo "Deploying to production server..."
-          # Simulate deployment
-          echo "Deployment successful! 🚀"
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      #- name: Discord Failure Alert
+      #  if: failure() 
+      #  uses: rjstone/discord-webhook-notify@v1
+      #  with:
+      #    severity: error
+      #    username: GitHub Actions
+      #    color: '#ff0000' 
+      #    details: "🚨 **Deployment Failed!** \n\nThe HTML pipeline crashed. Please check the GitHub logs."
+      #    webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
