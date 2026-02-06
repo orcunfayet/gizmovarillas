@@ -5,11 +5,15 @@ on:
     branches: [ "main", "master" ]
   pull_request:
     branches: [ "main", "master" ]
+
+# Permissions for GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
+
 jobs:
+  #job1: validate html
   validate-html:
     runs-on: ubuntu-latest
     steps:
@@ -18,15 +22,18 @@ jobs:
       
       - name: Set up Python
         uses: actions/setup-python@v5
+        # Caching dependencies to speed up the workflow
         with:
-          python-version: '3.x'
+          python-version: '3.11'
+          cache: 'pip' # Uses requirements.txt to cache downloads
 
-      - name: Install HTML Validator
-        run: pip install html5validator
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
       - name: Run Validation
         run: html5validator --root .
 
+  #job2: deploy to github pages
   deploy:
     needs: validate-html
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
@@ -51,7 +58,7 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
+      
       #- name: Discord Failure Alert
       #  if: failure() 
       #  uses: rjstone/discord-webhook-notify@v1
